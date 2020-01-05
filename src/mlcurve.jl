@@ -11,7 +11,7 @@ function _get_auc(x::RealVector, y::RealVector, fontsize::Int, percent::Bool)
     else
         txt = "auc = $(round(val, digits = 2))"
     end
-    return (0.5, 0.025, text(txt, fontsize))
+    return (0.5, 0.02, text(txt, fontsize))
 end
 
 
