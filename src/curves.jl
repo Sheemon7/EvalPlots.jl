@@ -11,21 +11,26 @@
 end
 
 
+function _get_arguments(mtd, args, fx::Function, fy::Function)
+    n = length(args)
+    if n == 1 && typeof(args[1]) <: CountsVector 
+        return (args[1], fx, fy)
+    elseif n == 2 && typeof(args[1]) <: RealVector && typeof(args[2]) <: RealVector
+        return args
+    else
+        throw(MethodError(mtd, args))
+    end
+end
+
 # ROC curve
 @userplot ROCCurve
 
 @recipe function f(h::ROCCurve)
-    if typeof(h.args[1]) <: CountsVector
-        args = (h.args[1], false_positive_rate, true_positive_rate)
-    else
-        args = h.args
-    end
-    @series begin
-        seriestype := :mlcurve
-        diag   --> true
-        title  --> "ROC curve"
-        args
-    end
+    seriestype := :mlcurve
+    diag   --> true
+    title  --> "ROC curve"
+    _get_arguments(roccurve, h.args, false_positive_rate, true_positive_rate)
+
 end
 
 Plots.@deps ROCCurve
@@ -35,16 +40,9 @@ Plots.@deps ROCCurve
 @userplot PRCurve
 
 @recipe function f(h::PRCurve)
-    if typeof(h.args[1]) <: CountsVector
-        args = (h.args[1], recall, precision)
-    else
-        args = h.args
-    end
-    @series begin
-        seriestype := :mlcurve
-        title  --> "Precision-Recall curve"
-        args
-    end
+    seriestype := :mlcurve
+    title  --> "Precision-Recall curve"
+    _get_arguments(prcurve, h.args, recall, precision)
 end
 
 Plots.@deps PRCurve
@@ -54,17 +52,10 @@ Plots.@deps PRCurve
 @userplot PQuantCurve
 
 @recipe function f(h::PQuantCurve; rev = true)
-    if typeof(h.args[1]) <: CountsVector
-        args = (h.args[1], quant, precision)
-    else
-        args = h.args
-    end
-    @series begin
-        seriestype := :mlcurve
-        title  --> "Precision-Quantile curve"
-        ylabel --> "quantile"
-        args
-    end
+    seriestype := :mlcurve
+    title  --> "Precision-Quantile curve"
+    ylabel --> "quantile"
+    _get_arguments(pquantcurve, h.args, quant, precision)
 end
 
 Plots.@deps PQuantCurve
@@ -74,17 +65,10 @@ Plots.@deps PQuantCurve
 @userplot RQuantCurve
 
 @recipe function f(h::RQuantCurve; rev = true)
-    if typeof(h.args[1]) <: CountsVector
-        args = (h.args[1], recall, precision)
-    else
-        args = h.args
-    end
-    @series begin
-        seriestype := :mlcurve
-        title  --> "Recall-Quantile curve"
-        ylabel --> "quantile"
-        args
-    end
+    seriestype := :mlcurve
+    title  --> "Recall-Quantile curve"
+    ylabel --> "quantile"
+    _get_arguments(rquantcurve, h.args, quant, recall)
 end
 
 Plots.@deps RQuantCurve
