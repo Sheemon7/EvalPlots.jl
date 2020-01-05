@@ -4,9 +4,9 @@ function _get_coordinates(x::Real, y::Real, fontsize::Int)
 end
 
 
-function _get_auc(x::RealVector, y::RealVector, fontsize::Int, percent::Bool)
+function _get_auc(x::RealVector, y::RealVector, fontsize::Int, aucpercent::Bool)
     val = auc(x,y)
-    if percent
+    if aucpercent
         txt = "auc = $(round(100*val, digits = 2))%"
     else
         txt = "auc = $(round(val, digits = 2))"
@@ -16,20 +16,15 @@ end
 
 
 @recipe function f(::Type{Val{:mlcurve}}, x, y, z; indexes     = Int[],
-                                                   xrev        = false,
-                                                   yrev        = false,
-                                                   showauc     = true,
                                                    coordinates = true,
-                                                   percent     = true,
-                                                   diag        = false)
+                                                   aucshow     = true,
+                                                   aucpercent  = true,
+                                                   diagonal    = false)
 
-    xrev && reverse!(x)
-    yrev && reverse!(y)
-    
     ## handle annotations
     annots = Tuple[]
     coordinates && append!(annots, _get_coordinates.(x[indexes], y[indexes], 8))
-    showauc     && push!(annots, _get_auc(x, y, 8, percent))
+    aucshow     && push!(annots, _get_auc(x, y, 8, aucpercent))
     if haskey(plotattributes, :annotations)
         append!(plotattributes[:annotations], annots)
     else
@@ -63,7 +58,7 @@ end
         ()
     end 
 
-    if showauc
+    if aucshow
         @series begin
             seriestype  := :shape
             linecolor   := :black
@@ -75,11 +70,12 @@ end
         end 
     end
 
-    if diag
+    if diagonal
         @series begin
             seriestype  := :path
-            linecolor   := :red
+            linecolor   := :grey
             linestyle   := :dash
+            alpha       := 0.5
             label       := ""
             x           := [0, 1]
             y           := [0, 1]

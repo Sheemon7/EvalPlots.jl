@@ -27,8 +27,8 @@ end
 
 @recipe function f(h::ROCCurve)
     seriestype := :mlcurve
-    diag   --> true
-    title  --> "ROC curve"
+    diagonal   --> true
+    title      --> "ROC curve"
     _get_arguments(roccurve, h.args, false_positive_rate, true_positive_rate)
 
 end
@@ -41,7 +41,7 @@ Plots.@deps ROCCurve
 
 @recipe function f(h::PRCurve)
     seriestype := :mlcurve
-    title  --> "Precision-Recall curve"
+    title      --> "Precision-Recall curve"
     _get_arguments(prcurve, h.args, recall, precision)
 end
 
@@ -53,8 +53,8 @@ Plots.@deps PRCurve
 
 @recipe function f(h::PQuantCurve; rev = true)
     seriestype := :mlcurve
-    title  --> "Precision-Quantile curve"
-    ylabel --> "quantile"
+    title      --> "Precision-Quantile curve"
+    ylabel     --> "quantile"
     _get_arguments(pquantcurve, h.args, quant, precision)
 end
 
@@ -66,8 +66,8 @@ Plots.@deps PQuantCurve
 
 @recipe function f(h::RQuantCurve; rev = true)
     seriestype := :mlcurve
-    title  --> "Recall-Quantile curve"
-    ylabel --> "quantile"
+    title      --> "Recall-Quantile curve"
+    ylabel     --> "quantile"
     _get_arguments(rquantcurve, h.args, quant, recall)
 end
 
