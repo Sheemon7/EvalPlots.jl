@@ -26,23 +26,38 @@ end
     xrev && reverse!(x)
     yrev && reverse!(y)
     
+    ## handle annotations
     annots = Tuple[]
     coordinates && append!(annots, _get_coordinates.(x[indexes], y[indexes], 8))
     showauc     && push!(annots, _get_auc(x, y, 8, percent))
+    if haskey(plotattributes, :annotations)
+        append!(plotattributes[:annotations], annots)
+    else
+        annotations := annots
+    end
 
-    color_ind = plotattributes[:plot_object].n
-
-    grid   := true
-    legend := false
-    xlims  := (0, 1.01)
-    ylims  := (0, 1.01)
-    xticks := (0:0.25:1, ["0", "0.25", "0.5", "0.75", "1"])
-    yticks := (0:0.25:1, ["0", "0.25", "0.5", "0.75", "1"])
+    ## Set attributes
+    grid   --> true
+    legend --> false
+    label  --> ""
+    xlims  --> (0, 1.01)
+    ylims  --> (0, 1.01)
+    xticks --> (0:0.25:1, ["0", "0.25", "0.5", "0.75", "1"])
+    yticks --> (0:0.25:1, ["0", "0.25", "0.5", "0.75", "1"])
 
     @series begin
+        seriestype  := :path
+        marker      := :none
+        x           := x
+        y           := y
+        ()
+    end
+
+    @series begin
+        primary           := false
         seriestype        := :scatter
-        markercolor       := color_ind
-        markerstrokecolor := color_ind
+        label             := ""
+        markerstrokecolor := :auto
         x                 := x[indexes]
         y                 := y[indexes]
         ()
@@ -53,6 +68,7 @@ end
             seriestype  := :shape
             linecolor   := :black
             fillcolor   := :white
+            label       := ""
             x           := [0.4, 0.6, 0.6, 0.4, 0.4]
             y           := [0, 0, 0.05, 0.05, 0]
             ()
@@ -64,20 +80,12 @@ end
             seriestype  := :path
             linecolor   := :red
             linestyle   := :dash
+            label       := ""
             x           := [0, 1]
             y           := [0, 1]
             ()
         end 
     end
-
-    @series begin
-        seriestype  := :path
-        color       := color_ind
-        annotations := annots
-        x           := x
-        y           := y
-        ()
-    end 
 end
 
 Plots.@deps mlcurve
