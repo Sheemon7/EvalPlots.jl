@@ -52,7 +52,7 @@ uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 
 [[EvalMetrics]]
 deps = ["Statistics", "StatsBase", "Test"]
-git-tree-sha1 = "f07006df93ea63880db00421298926b0bbc28844"
+git-tree-sha1 = "367deee8d5a0284171c3799fc1135c703f98370b"
 repo-rev = "master"
 repo-url = "git@github.com:VaclavMacha/EvalMetrics.jl.git"
 uuid = "251d5f9e-10c1-4699-ba24-e0ad168fa3e4"

@@ -1,14 +1,13 @@
 module EvalPlots
 
 using Reexport
-import EvalMetrics
-import EvalMetrics: Counts
-import StatsBase: RealVector, IntegerVector, IntegerMatrix
+import StatsBase: RealVector, IntegerVector
 
 @reexport using Plots
+@reexport using EvalMetrics
 
 # includes
-include("curve.jl")
-include("basic_curves.jl")
+include("mlcurve.jl")
+include("curves.jl")
 
 end
